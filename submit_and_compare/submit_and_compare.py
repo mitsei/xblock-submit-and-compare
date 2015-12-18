@@ -95,6 +95,7 @@ class SubmitAndCompareXBlock(XBlock):
                                     attributes = attributes
                                     ))
         frag.add_css(self.resource_string('static/css/submit_and_compare.css'))
+        frag.add_javascript(self.resource_string('static/js/lscache/lscache.min.js'))
         frag.add_javascript(self.resource_string('static/js/submit_and_compare_view.js'))
         frag.initialize_js('SubmitAndCompareXBlockInitView')
         return frag
@@ -231,3 +232,15 @@ class SubmitAndCompareXBlock(XBlock):
             # workaround for xblock workbench
             unique_id = 'workbench-workaround-id'
         return unique_id
+
+    @staticmethod
+    def workbench_scenarios():
+        """A canned scenario for display in the workbench."""
+        return [
+            ("submit and compare",
+             """\
+                <vertical_demo>
+                    <submit_and_compare/>
+                </vertical_demo>
+             """)
+        ]

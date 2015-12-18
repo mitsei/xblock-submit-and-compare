@@ -15,6 +15,9 @@ function SubmitAndCompareXBlockInitView(runtime, element) {
     var expert_answer = $element.find('.expert_answer');
     var hint_div = $element.find('.hint');
     var hint_button_holder = $element.find('.hint_button_holder');
+
+    var answer_field = your_answer.siblings('textarea.answer');
+    var cache_key = 'submitAndCompare' + $element.data('request-token');
     
     var hint;
     var hints;
@@ -27,6 +30,15 @@ function SubmitAndCompareXBlockInitView(runtime, element) {
         success: set_hints
     });
 
+    function load_answer_from_cache() {
+        lscache.flushExpired();
+        var storedAnswer = lscache.get(cache_key);
+
+        if (storedAnswer != null) {
+            answer_field.val(storedAnswer);
+        }
+    }
+
     function publish_event(data) {
       $.ajax({
           type: "POST",
@@ -36,6 +48,8 @@ function SubmitAndCompareXBlockInitView(runtime, element) {
     }
 
 	function post_submit(result) {
+        // cache the result locally
+        lscache.set(cache_key, answer_field.val(), 10);
 	}
 	
 	function set_hints(result) {
